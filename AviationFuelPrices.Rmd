@@ -2,7 +2,7 @@
 title: "Aviation Fuel Prices and Traffic Volume"
 author: "John Klapp"
 date: "November 26, 2019"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -11,8 +11,10 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 ## General Aviation Volume
 
-Aviation gasoline sales are a good proxy for the health of [General Aviation](https://en.wikipedia.org/wiki/General_aviation), excluding corporate jets. This segment of the aviation market includes flight trainig, recreational flying and personal travel. Historically, aviation has been strongly impacted by fuel prices, but the trend below indicates a slow death of general aviation is not caused solely by fuel prices. The FAA has recently begun efforts to reduce the incredible regulatory burden on General Aviation, but it may be too little, too late.
-```{r}
+Aviation gasoline sales are a good proxy for the health of [General Aviation](https://en.wikipedia.org/wiki/General_aviation), excluding corporate jets. This segment of the aviation market includes flight trainig, recreational flying and personal travel. The FAA has recently begun efforts to reduce the incredible regulatory burden on General Aviation, but it may be too little, too late as fuel prices have continued to climb as more suppliers have exited the market. 
+
+## Note the decrease in aviation as prices increase
+```{r echo=FALSE}
 library(plotly)
 data <- read.csv("AvGasDeliveries.csv", stringsAsFactors = FALSE)
 monthly_cpi <- read.csv("CPIAUCSL.csv", header = TRUE)
@@ -27,5 +29,7 @@ p <- plot_ly(data, x = data$Date) %>% add_trace(y=data$Deliveries, name = "Deliv
 p
 
 ```
+
+## Credits
 
 Aviation fuel prices are from the US Energy Information Association at [prices](https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=EMA_EPPV_PTG_NUS_DPG&f=M) and [deliveries](https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=pet&s=c400000001&f=m). Trend ends in 2013, as the number of fuel suppliers droped so low that the EIA stopped reporting data to protect sensitive corporate data. Data was combined manually in excel, as the downloaded format is poorly in .xls. Consumer Price Index from the [St Louis Federal Reserve Board](https://fred.stlouisfed.org/series/CPIAUCSL)
