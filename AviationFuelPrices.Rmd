@@ -15,8 +15,10 @@ Aviation gasoline sales are a good proxy for the health of [Geneal Aviation](htt
 ```{r}
 library(plotly)
 data <- read.csv("AvGasDeliveries.csv", stringsAsFactors = FALSE)
+data$Date <- as.Date(paste("01-",data$Date, sep = ""), format="%d-%b-%Y")
+data$Deliveries <- data$Deliveries/1000
 
-p <- plot_ly(data, x = data$Date) %>% add_trace(y=data$Deliveries, name = "Deliveries 1000 x US Gal") %>% add_trace(y=data$Price, name = "Price ($USD/gal")
+p <- plot_ly(data, x = data$Date) %>% add_trace(y=data$Deliveries, name = "Deliveries 1000 x US Gal", mode="lines") %>% add_trace(y=data$Price, name = "Price ($USD/gal", mode="lines")
 
 ```
 
