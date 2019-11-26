@@ -1,0 +1,28 @@
+--
+title: "Airport Operations"
+author: "John Klapp"
+date: "November 25, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Airport Operations in CY2018
+This map shows number of airport operations in 2018. It combines the FAA operations data from (https://www.faa.gov/data_research/aviation_data_statistics/) with lat/long from (https://vega.github.io/vega-tutorials/airports/). Note that this only includes airports with an air traffic control tower; there are tens of thousands of other airports in the US, serving needs from aeromedical evacuation and air freight to aerial firefighting and precision agricultural application. None of those "small" airports are plotted on this chart. 
+
+```{r}
+library(leaflet)
+
+ops <- read.csv("apt_operations.csv",stringsAsFactors = FALSE)
+apts <- read.csv("airports.csv",stringsAsFactors = FALSE)
+combined <- merge(ops, apts, by.x="Apt", by.y  = "iata") 
+combined$tag <- paste(combined$name, combined$Operations, sep='\n')
+combined$Operations <- as.numeric(gsub(",", "",combined$Operations))
+
+
+combined %>% leaflet() %>% addTiles() %>% addCircles(weight=1, radius=sqrt(combined$Operations)*100,popup = combined$tag)
+```
+
+
