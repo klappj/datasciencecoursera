@@ -18,7 +18,7 @@ library(leaflet)
 ops <- read.csv("apt_operations.csv",stringsAsFactors = FALSE)
 apts <- read.csv("airports.csv",stringsAsFactors = FALSE)
 combined <- merge(ops, apts, by.x="Apt", by.y  = "iata") 
-combined$tag <- paste(combined$name, combined$Operations, sep='\n')
+combined$tag <- paste(combined$name, combined$Operations, sep="<br>")
 combined$Operations <- as.numeric(gsub(",", "",combined$Operations))
 
 
