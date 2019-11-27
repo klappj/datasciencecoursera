@@ -10,6 +10,7 @@
 library(shiny)
 library(ggplot2)
 library(jsonlite)
+library(scales)
 
 # load and clean data
 wiggle <- as.data.frame(fromJSON("wiggleData.json"))
@@ -34,18 +35,23 @@ data <- merge(data, countryGDP, by="three", all.x = TRUE) # add GDP
 shinyServer(function(input, output) {
    
   output$distPlot <- renderPlot({
-    p <- ggplot(data)
+    p <- ggplot(data) + ylab("Number of WiFi Networks")
     
     if (input$xvar == "GDP") {
       p <- p + geom_point(aes(x=GDP, y=WAPs)) 
+      p <- p + xlab("Gross Domestic Product, $USD")
     } else if (input$xvar == "Population") {
       p <- p + geom_point(aes(x=population, y=WAPs))
+      p <- P + xlab("Population")
     } else {
       p <- p + geom_point(aes(x=size, y=WAPs))
+      p <- p + xlab("Country Size, square miles")
     }
     
-    if (input$xlog) { p <- p + scale_x_continuous(trans="log10")}
-    if (input$ylog) { p <- p + scale_y_continuous(trans="log10")}
+    if (input$xlog) { p <- p + scale_x_continuous(trans="log10",
+                                                  labels=comma)}
+    if (input$ylog) { p <- p + scale_y_continuous(trans="log10",
+                                                  labels=comma)}
     
     p
     
