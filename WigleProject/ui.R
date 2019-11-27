@@ -18,13 +18,13 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30),
+       #sliderInput("bins",
+       #            "Number of bins:",
+       #            min = 1,
+       #            max = 50,
+       #            value = 30),
        radioButtons("xvar",
-                    "Select X axis",
+                    "Select variable for x axis",
                     choices = "GDP","Population","Area"),
        checkboxInput("xlog",
                      "Scale x-axis logarithmically",
