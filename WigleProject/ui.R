@@ -13,11 +13,12 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Data From Wigle"),
+  titlePanel("Number of WiFi Networks"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
+       tags$div("This app gives you a visualization of wifi networks by country. The options below allow you to change the scale and axis."),
        #sliderInput("bins",
        #            "Number of bins:",
        #            min = 1,
@@ -28,10 +29,10 @@ shinyUI(fluidPage(
                     choices = c("GDP","Population","Area")),
        checkboxInput("xlog",
                      "Scale x-axis logarithmically",
-                     value = FALSE),
+                     value = TRUE),
        checkboxInput("ylog",
                      "Scale y-axis logarithmically",
-                     value = FALSE)
+                     value = TRUE)
        
     ),
     
