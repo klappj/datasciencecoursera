@@ -9,6 +9,26 @@
 
 library(shiny)
 library(ggplot2)
+library(jsonlite)
+
+# load and clean data
+wiggle <- as.data.frame(fromJSON("wiggleData.json"))
+colnames(wiggle) <- c("success","two","WAPs")
+wiggle$two[wiggle$two=="XK"] <- "KV" # Fix Kosovo
+countrySize <- read.csv("IDBextCTYS.txt",sep = "|", stringsAsFactors = FALSE)
+colnames(countrySize) <- c("two","Name","size")
+countryPop <- read.csv("IDBext001.txt",sep = "|", stringsAsFactors = FALSE)
+colnames(countryPop) <- c("two","year","population")
+countryPop <- countryPop[countryPop$year==2019,] #just 2019 data
+countryGDP <- read.csv("GDP.csv", stringsAsFactors = FALSE)
+colnames(countryGDP) <- c("three","Ranking","name","GDP")
+countryCodes <- read.csv("CountryCodes.csv", stringsAsFactors = FALSE)
+
+#merge the data into a dataframe named data
+data <- merge(wiggle, countryCodes) # get 3 digit codes, drop NA and blank
+data <- merge(data, countrySize, by="two", all.x = TRUE) # add landmass
+data <- merge(data, countryPop, by="two", all.x = TRUE) # add population
+data <- merge(data, countryGDP, by="three", all.x = TRUE) # add GDP
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
