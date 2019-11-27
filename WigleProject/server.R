@@ -38,7 +38,7 @@ shinyServer(function(input, output) {
     
     if (input$xvar == "GDP") {
       p <- p + geom_point(aes(x=GDP, y=WAPs)) 
-    } else if (input$xvar == "population") {
+    } else if (input$xvar == "Population") {
       p <- p + geom_point(aes(x=population, y=WAPs))
     } else {
       p <- p + geom_point(aes(x=size, y=WAPs))
