@@ -1,0 +1,55 @@
+---
+title: "Untitled"
+author: "John Klapp"
+date: "November 26, 2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## data sources
+US Census International Programs
+https://www.census.gov/data-tools/demo/idb/informationGateway.php
+
+IDBextCTYS.txt Country Size data
+IDBext001.txt Population data
+
+World Bank https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
+GDP_history.csv
+
+wiggle API https://api.wigle.net/swagger#/Statistics_and_information/countries
+
+wiggleData.json
+
+Country Codes ISO 3066, with Kosovo manually added because ISO hasn't caught up
+CountryCodes.csv
+
+## build data frame
+```{r}
+library(jsonlite)
+wiggle <- as.data.frame(fromJSON("wiggleData.json"))
+colnames(wiggle) <- c("success","two","WAPs")
+wiggle$two[wiggle$two=="XK"] <- "KV" # Fix Kosovo
+countrySize <- read.csv("IDBextCTYS.txt",sep = "|", stringsAsFactors = FALSE)
+colnames(countrySize) <- c("two","Name","size")
+countryPop <- read.csv("IDBext001.txt",sep = "|", stringsAsFactors = FALSE)
+colnames(countryPop) <- c("two","year","population")
+countryPop <- countryPop[countryPop$year==2019,] #just 2019 data
+countryGDP <- read.csv("GDP.csv", stringsAsFactors = FALSE)
+colnames(countryGDP) <- c("three","Ranking","name","GDP")
+countryCodes <- read.csv("CountryCodes.csv", stringsAsFactors = FALSE)
+
+#merge 
+data <- merge(wiggle, countryCodes) # get 3 digit codes, drop NA and blank
+data <- merge(data, countrySize, by="two", all.x = TRUE) # add landmass
+data <- merge(data, countryPop, by="two", all.x = TRUE) # add population
+data <- merge(data, countryGDP, by="three", all.x = TRUE) # add GDP
+```
+## Options
+radioboxes for x and y scale
+checkboxes for log(x) and log(y) scales
+brush returns list of countries in the swept area
+
+This is actually a pain in the ass. 
